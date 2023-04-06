@@ -40,21 +40,6 @@ if [ -f ${CONF} ]; then
 		echo "============================="
   fi
 
-  if [ -z ${snell_obfs} ]; then
-    echo -e "请输入 obfs ( tls / http / off ) "
-    read -e -p "(默认: tls):" snell_obfs
-    [[ -z "${snell_obfs}" ]] && snell_obfs="tls"
-
-		echo "============================="
-		echo -e "obfs : \033[43;35m ${snell_obfs} \033[0m"
-		echo "============================="
-
-  else
-    echo "============================="
-		echo -e "obfs : \033[43;35m tls \033[0m"
-		echo "============================="
-  fi
-
   if [ -z ${PSK} ]; then
     PSK=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16)
     echo "随机生成 psk "
@@ -75,7 +60,6 @@ if [ -f ${CONF} ]; then
   echo "[snell-server]" >>${CONF}
   echo "listen = 0.0.0.0:${snell_port}" >>${CONF}
   echo "psk = ${PSK}" >>${CONF}
-  echo "obfs = ${snell_obfs}" >>${CONF}
 
   echo
   echo
@@ -87,7 +71,6 @@ if [ -f ${CONF} ]; then
   echo "[snell-server]"
   echo "listen = 0.0.0.0:${snell_port}"
   echo "psk = ${PSK}"
-  echo "obfs = ${snell_obfs}"
   echo "============================="
 fi
 if [ -f ${SYSTEMD} ]; then
