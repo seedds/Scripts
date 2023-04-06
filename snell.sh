@@ -11,69 +11,29 @@ rm -f snell.zip
 chmod +x snell-server
 mv -f snell-server /usr/local/bin/
 
-if [ -f ${CONF} ]; then
-  echo -e " \033[1;32m 已安装 \033[0m Snell"
 
-  echo
-  echo
-  echo
+echo "Snell Port [1-65535]"
+read -p "(Default: 14250):" snell_port
+[[ -z "${snell_port}" ]] && snell_port="14250"
 
-  echo -e  "\033[1;33m Snell 配置 \033[0m"
-  echo "============================="
-  cat /etc/snell/snell-server.conf
-  echo "============================="
+echo "Snell PSK"
+read -p "(Default: Random):" snell_psk
+[[ -z "${snell_psk}" ]] && snell_psk=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16)
 
-  else
-    echo -e " \033[1;32m 开始安装 \033[0m Snell"
-  if [ -z ${snell_port} ]; then
-    echo -e "请输入 Snell 端口 [1-65535]"
-    read -e -p "(默认: 14250):" snell_port
-    [[ -z "${snell_port}" ]] && snell_port="14250"
+mkdir /etc/snell/
+echo "Generating new config..."
+echo "[snell-server]" >>${CONF}
+echo "listen = 0.0.0.0:${snell_port}" >>${CONF}
+echo "psk = ${snell_psk}" >>${CONF}
 
-		echo "============================="
-		echo -e "端口 : \033[43;35m ${snell_port} \033[0m"
-		echo "============================="
+echo "============================="
+echo "[snell-server]"
+echo "listen = 0.0.0.0:${snell_port}"
+echo "psk = ${snell_psk}"
+echo "============================="
 
-  else
-    echo "============================="
-		echo -e "端口 : \033[43;35m 12312 \033[0m"
-		echo "============================="
-  fi
-
-  if [ -z ${PSK} ]; then
-    PSK=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16)
-    echo "随机生成 psk "
-    echo "============================="
-		echo -e "PSK : \033[43;35m ${PSK} \033[0m"
-		echo "============================="
-
-  else
-
-    echo "============================="
-    echo -e "PSK : \033[43;35m ${PSK} \033[0m"
-    echo "============================="
-
-  fi
-
-  mkdir /etc/snell/
-  echo "Generating new config..."
-  echo "[snell-server]" >>${CONF}
-  echo "listen = 0.0.0.0:${snell_port}" >>${CONF}
-  echo "psk = ${PSK}" >>${CONF}
-
-  echo
-  echo
-  echo
-
-
-  echo -e  "\033[1;33m Snell 配置 \033[0m"
-  echo "============================="
-  echo "[snell-server]"
-  echo "listen = 0.0.0.0:${snell_port}"
-  echo "psk = ${PSK}"
-  echo "============================="
-fi
-if [ -f ${SYSTEMD} ]; then
+if [ -f ${SYSTEMD} ]
+then
   echo "Found existing service..."
   systemctl daemon-reload
   systemctl restart snell
