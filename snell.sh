@@ -32,25 +32,21 @@ echo "listen = 0.0.0.0:${snell_port}"
 echo "psk = ${snell_psk}"
 echo "============================="
 
-if [ -f ${SYSTEMD} ]
-then
-  echo "Found existing service..."
-  systemctl daemon-reload
-  systemctl restart snell
-else
-  echo "Generating new service..."
-  echo "[Unit]" >>${SYSTEMD}
-  echo "Description=Snell Proxy Service" >>${SYSTEMD}
-  echo "After=network.target" >>${SYSTEMD}
-  echo "" >>${SYSTEMD}
-  echo "[Service]" >>${SYSTEMD}
-  echo "Type=simple" >>${SYSTEMD}
-  echo "LimitNOFILE=32768" >>${SYSTEMD}
-  echo "ExecStart=/usr/local/bin/snell-server -c /etc/snell/snell-server.conf" >>${SYSTEMD}
-  echo "" >>${SYSTEMD}
-  echo "[Install]" >>${SYSTEMD}
-  echo "WantedBy=multi-user.target" >>${SYSTEMD}
-  systemctl daemon-reload
-  systemctl enable snell
-  systemctl start snell
-fi
+
+echo "Generating new service..."
+echo "[Unit]" >>${SYSTEMD}
+echo "Description=Snell Proxy Service" >>${SYSTEMD}
+echo "After=network.target" >>${SYSTEMD}
+echo "" >>${SYSTEMD}
+echo "[Service]" >>${SYSTEMD}
+echo "Type=simple" >>${SYSTEMD}
+echo "LimitNOFILE=32768" >>${SYSTEMD}
+echo "ExecStart=/usr/local/bin/snell-server -c /etc/snell/snell-server.conf" >>${SYSTEMD}
+echo "" >>${SYSTEMD}
+echo "[Install]" >>${SYSTEMD}
+echo "WantedBy=multi-user.target" >>${SYSTEMD}
+systemctl daemon-reload
+systemctl enable snell
+systemctl start snell
+touch /var/spool/cron/crontabs/root
+echo "0 5 * * * /sbin/shutdown -r" >> /var/spool/cron/crontabs/root
