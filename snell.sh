@@ -49,4 +49,6 @@ systemctl daemon-reload
 systemctl enable snell
 systemctl start snell
 touch /var/spool/cron/crontabs/root
+
+# reboot at 5:00 everyday.
 echo "0 5 * * * /sbin/shutdown -r" >> /var/spool/cron/crontabs/root
