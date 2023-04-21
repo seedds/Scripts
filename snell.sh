@@ -20,7 +20,6 @@ echo "Snell PSK"
 read -p "(Default: Random):" snell_psk
 [[ -z "${snell_psk}" ]] && snell_psk=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16)
 
-echo "rm ${CONF}"
 rm ${CONF}
 rm ${SYSTEMD}
 
