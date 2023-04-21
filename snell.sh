@@ -20,9 +20,12 @@ echo "Snell PSK"
 read -p "(Default: Random):" snell_psk
 [[ -z "${snell_psk}" ]] && snell_psk=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16)
 
+echo "rm ${CONF}"
+rm ${CONF}
+rm ${SYSTEMD}
+
 mkdir /etc/snell/
 echo "Generating new config..."
-rm ${CONF}
 echo "[snell-server]" >>${CONF}
 echo "listen = 0.0.0.0:${snell_port}" >>${CONF}
 echo "psk = ${snell_psk}" >>${CONF}
