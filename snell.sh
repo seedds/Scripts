@@ -22,6 +22,7 @@ read -p "(Default: Random):" snell_psk
 
 mkdir /etc/snell/
 echo "Generating new config..."
+rm ${CONF}
 echo "[snell-server]" >>${CONF}
 echo "listen = 0.0.0.0:${snell_port}" >>${CONF}
 echo "psk = ${snell_psk}" >>${CONF}
