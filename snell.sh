@@ -20,6 +20,14 @@ echo "Snell PSK"
 read -p "(Default: Random):" snell_psk
 [[ -z "${snell_psk}" ]] && snell_psk=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16)
 
+echo "Shadow Port [1-65535]"
+read -p "(Default: 58443):" shadow_port
+[[ -z "${shadow_port}" ]] && shadow_port="58443"
+
+echo "Shadow PSK"
+read -p "(Default: Random):" shadow_psk
+[[ -z "${shadow_psk}" ]] && shadow_psk=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16)
+
 rm ${CONF}
 rm ${SYSTEMD}
 
@@ -48,10 +56,35 @@ echo "ExecStart=/usr/local/bin/snell-server -c /etc/snell/snell-server.conf" >>$
 echo "" >>${SYSTEMD}
 echo "[Install]" >>${SYSTEMD}
 echo "WantedBy=multi-user.target" >>${SYSTEMD}
-systemctl daemon-reload
 systemctl enable snell
+systemctl daemon-reload
 systemctl start snell
-touch /var/spool/cron/crontabs/root
+
+
+wget --no-check-certificate https://github.com/ihciah/shadow-tls/releases/download/v0.2.23/shadow-tls-x86_64-unknown-linux-musl -O /usr/local/bin/shadow-tls
+chmod +x /usr/local/bin/shadow-tls
+SHADOW_TLS_SERVICE = "/etc/systemd/system/shadow-tls.service"
+rm ${SHADOW_TLS_SERVICE}
+touch ${SHADOW_TLS_SERVICE}
+echo "[Unit]" >> ${SHADOW_TLS_SERVICE}
+echo "Description=Shadow-TLS Server Service" >> ${SHADOW_TLS_SERVICE}
+echo "Documentation=man:sstls-server" >> ${SHADOW_TLS_SERVICE}
+echo "After=network-online.target" >> ${SHADOW_TLS_SERVICE}
+echo "Wants=network-online.target" >> ${SHADOW_TLS_SERVICE}
+echo "" >> ${SHADOW_TLS_SERVICE}
+echo "[Service]" >> ${SHADOW_TLS_SERVICE}
+echo "Type=simple" >> ${SHADOW_TLS_SERVICE}
+echo "ExecStart=shadow-tls --v3 server --listen ::0:${shadow_port} --server 127.0.0.1:${snell_port} --tls  gateway.icloud.com  --password ${shadow_psk}" >> ${SHADOW_TLS_SERVICE}
+echo "StandardOutput=syslog" >> ${SHADOW_TLS_SERVICE}
+echo "StandardError=syslog" >> ${SHADOW_TLS_SERVICE}
+echo "SyslogIdentifier=shadow-tls" >> ${SHADOW_TLS_SERVICE}
+echo "" >> ${SHADOW_TLS_SERVICE}
+echo "[Install]" >> ${SHADOW_TLS_SERVICE}
+echo "WantedBy=multi-user.target" >> ${SHADOW_TLS_SERVICE}
+systemctl enable shadow-tls.service
+systemctl daemon-reload
+systemctl start shadow-tls.service
 
 # reboot at 5:00 everyday.
+touch /var/spool/cron/crontabs/root
 echo "0 5 * * * /sbin/shutdown -r" >> /var/spool/cron/crontabs/root
