@@ -3,7 +3,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 CONF="/etc/snell/snell-server.conf"
 SYSTEMD="/etc/systemd/system/snell.service"
-SHADOW_TLS_SERVICE="/etc/systemd/system/shadow-tls.service"
+SHADOW="/etc/systemd/system/shadow-tls.service"
 apt-get install unzip -y
 cd ~/
 wget --no-check-certificate -O snell.zip https://dl.nssurge.com/snell/snell-server-v4.0.1-linux-amd64.zip
@@ -31,6 +31,7 @@ read -p "(Default: Random):" shadow_psk
 
 rm ${CONF}
 rm ${SYSTEMD}
+rm ${SHADOW}
 
 mkdir /etc/snell/
 echo "Generating new config..."
@@ -64,23 +65,21 @@ systemctl start snell
 
 wget --no-check-certificate https://github.com/ihciah/shadow-tls/releases/download/v0.2.23/shadow-tls-x86_64-unknown-linux-musl -O /usr/local/bin/shadow-tls
 chmod +x /usr/local/bin/shadow-tls
-rm ${SHADOW_TLS_SERVICE}
-touch ${SHADOW_TLS_SERVICE}
-echo "[Unit]" >> ${SHADOW_TLS_SERVICE}
-echo "Description=Shadow-TLS Server Service" >> ${SHADOW_TLS_SERVICE}
-echo "Documentation=man:sstls-server" >> ${SHADOW_TLS_SERVICE}
-echo "After=network-online.target" >> ${SHADOW_TLS_SERVICE}
-echo "Wants=network-online.target" >> ${SHADOW_TLS_SERVICE}
-echo "" >> ${SHADOW_TLS_SERVICE}
-echo "[Service]" >> ${SHADOW_TLS_SERVICE}
-echo "Type=simple" >> ${SHADOW_TLS_SERVICE}
-echo "ExecStart=shadow-tls --v3 server --listen ::0:${shadow_port} --server 127.0.0.1:${snell_port} --tls  gateway.icloud.com  --password ${shadow_psk}" >> ${SHADOW_TLS_SERVICE}
-echo "StandardOutput=syslog" >> ${SHADOW_TLS_SERVICE}
-echo "StandardError=syslog" >> ${SHADOW_TLS_SERVICE}
-echo "SyslogIdentifier=shadow-tls" >> ${SHADOW_TLS_SERVICE}
-echo "" >> ${SHADOW_TLS_SERVICE}
-echo "[Install]" >> ${SHADOW_TLS_SERVICE}
-echo "WantedBy=multi-user.target" >> ${SHADOW_TLS_SERVICE}
+echo "[Unit]" >> ${SHADOW}
+echo "Description=Shadow-TLS Server Service" >> ${SHADOW}
+echo "Documentation=man:sstls-server" >> ${SHADOW}
+echo "After=network-online.target" >> ${SHADOW}
+echo "Wants=network-online.target" >> ${SHADOW}
+echo "" >> ${SHADOW}
+echo "[Service]" >> ${SHADOW}
+echo "Type=simple" >> ${SHADOW}
+echo "ExecStart=shadow-tls --v3 server --listen ::0:${shadow_port} --server 127.0.0.1:${snell_port} --tls  gateway.icloud.com  --password ${shadow_psk}" >> ${SHADOW}
+echo "StandardOutput=syslog" >> ${SHADOW}
+echo "StandardError=syslog" >> ${SHADOW}
+echo "SyslogIdentifier=shadow-tls" >> ${SHADOW}
+echo "" >> ${SHADOW}
+echo "[Install]" >> ${SHADOW}
+echo "WantedBy=multi-user.target" >> ${SHADOW}
 systemctl enable shadow-tls.service
 systemctl daemon-reload
 systemctl start shadow-tls.service
