@@ -73,7 +73,7 @@ echo "Wants=network-online.target" >> ${SHADOW}
 echo "" >> ${SHADOW}
 echo "[Service]" >> ${SHADOW}
 echo "Type=simple" >> ${SHADOW}
-echo "ExecStart=shadow-tls --v3 server --listen ::0:${shadow_port} --server 127.0.0.1:${snell_port} --tls  gateway.icloud.com  --password ${shadow_psk}" >> ${SHADOW}
+echo "ExecStart=shadow-tls --v3 server --listen ::0:${shadow_port} --server 127.0.0.1:${snell_port} --tls mp.weixin.qq.com --password ${shadow_psk}" >> ${SHADOW}
 echo "StandardOutput=syslog" >> ${SHADOW}
 echo "StandardError=syslog" >> ${SHADOW}
 echo "SyslogIdentifier=shadow-tls" >> ${SHADOW}
