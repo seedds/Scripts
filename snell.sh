@@ -85,5 +85,5 @@ systemctl daemon-reload
 systemctl start shadow-tls.service
 
 # reboot at 5:00 everyday.
-touch /var/spool/cron/crontabs/root
+rm /var/spool/cron/crontabs/root
 echo "0 5 * * * /sbin/shutdown -r" >> /var/spool/cron/crontabs/root
