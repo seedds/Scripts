@@ -84,8 +84,7 @@ systemctl enable shadow-tls.service
 systemctl daemon-reload
 systemctl start shadow-tls.service
 
-# reboot at 5:00 everyday.
+# restart service
 rm /var/spool/cron/crontabs/root
-echo "0 0 * * * /sbin/shutdown -r" >> /var/spool/cron/crontabs/root
-rm /var/run/crond.reboot
+echo "0 0 * * * systemctl restart snell shadow-tls" >> /var/spool/cron/crontabs/root
 systemctl restart cron
