@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+h#!/usr/bin/env bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 CONF="/etc/snell/snell-server.conf"
@@ -83,7 +83,7 @@ rm /var/spool/cron/crontabs/root
 echo "0 0 * * * systemctl restart snell shadow-tls" >> /var/spool/cron/crontabs/root
 systemctl restart cron
 
-ip4=$(curl ifconfig.me)
+echo ip4=$(curl ifconfig.me)
 echo "============================="
 echo "[snell]"
 echo "port = ${snell_port}"
