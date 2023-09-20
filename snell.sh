@@ -4,6 +4,7 @@ export PATH
 CONF="/etc/snell/snell-server.conf"
 SYSTEMD="/etc/systemd/system/snell.service"
 SHADOW="/etc/systemd/system/shadow-tls.service"
+systemctl stop snell shadow-tls
 apt-get install unzip -y
 cd ~/
 wget --no-check-certificate -O snell.zip https://dl.nssurge.com/snell/snell-server-v4.0.1-linux-amd64.zip
