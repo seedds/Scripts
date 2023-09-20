@@ -4,6 +4,7 @@ export PATH
 CONF="/etc/snell/snell-server.conf"
 SYSTEMD="/etc/systemd/system/snell.service"
 SHADOW="/etc/systemd/system/shadow-tls.service"
+systemctl stop snell shadow-tls
 apt-get install unzip -y
 cd ~/
 wget --no-check-certificate -O snell.zip https://github.com/icpz/open-snell/releases/download/v3.0.1/snell-server-linux-amd64.zip
@@ -38,13 +39,6 @@ echo "Generating new config..."
 echo "[snell-server]" >>${CONF}
 echo "listen = 0.0.0.0:${snell_port}" >>${CONF}
 echo "psk = ${snell_psk}" >>${CONF}
-
-echo "============================="
-echo "[snell-server]"
-echo "listen = 0.0.0.0:${snell_port}"
-echo "psk = ${snell_psk}"
-echo "============================="
-
 
 echo "Generating new service..."
 echo "[Unit]" >>${SYSTEMD}
@@ -88,3 +82,14 @@ systemctl start shadow-tls.service
 rm /var/spool/cron/crontabs/root
 echo "0 0 * * * systemctl restart snell shadow-tls" >> /var/spool/cron/crontabs/root
 systemctl restart cron
+
+ip4=$(curl ifconfig.me)
+echo "============================="
+echo "[snell]"
+echo "port = ${snell_port}"
+echo "psk = ${snell_psk}"
+echo "[shadow-tls]"
+echo "port = ${shadow_port}"
+echo "psk = ${shadow_psk}"
+echo "snell, ${ip4}, ${shadow_port}, psk=${snell_psk}, version=4, shadow-tls-password=${shadow_psk}, shadow-tls-sni=gateway.icloud.com, shadow-tls-version=3"
+echo "============================="
