@@ -39,13 +39,6 @@ echo "[snell-server]" >>${CONF}
 echo "listen = 0.0.0.0:${snell_port}" >>${CONF}
 echo "psk = ${snell_psk}" >>${CONF}
 
-echo "============================="
-echo "[snell-server]"
-echo "listen = 0.0.0.0:${snell_port}"
-echo "psk = ${snell_psk}"
-echo "============================="
-
-
 echo "Generating new service..."
 echo "[Unit]" >>${SYSTEMD}
 echo "Description=Snell Proxy Service" >>${SYSTEMD}
@@ -88,3 +81,14 @@ systemctl start shadow-tls.service
 rm /var/spool/cron/crontabs/root
 echo "0 0 * * * systemctl restart snell shadow-tls" >> /var/spool/cron/crontabs/root
 systemctl restart cron
+
+ip4 = $(hostname -I)
+echo "============================="
+echo "[snell]"
+echo "port = ${snell_port}"
+echo "psk = ${snell_psk}"
+echo "[shadow-tls]"
+echo "port = ${shadow_port}"
+echo "psk = ${shadow_psk}"
+echo "snell, $(ip4), ${shadow_port}, psk=${snell_psk}, version=4, shadow-tls-password=${shadow_psk}, shadow-tls-sni=gateway.icloud.com, shadow-tls-version=3"
+echo "============================="
