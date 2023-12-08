@@ -83,7 +83,7 @@ rm /var/spool/cron/crontabs/root
 echo "0 0 * * * systemctl restart snell shadow-tls" >> /var/spool/cron/crontabs/root
 systemctl restart cron
 
-ip4=$(hostname -I | xargs)
+ip4=$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
 echo "============================="
 echo "[snell]"
 echo "port = ${snell_port}"
