@@ -57,7 +57,7 @@ systemctl daemon-reload
 systemctl start snell
 
 
-wget --no-check-certificate https://github.com/ihciah/shadow-tls/releases/download/v0.2.23/shadow-tls-x86_64-unknown-linux-musl -O /usr/local/bin/shadow-tls
+wget --no-check-certificate https://github.com/ihciah/shadow-tls/releases/download/v0.2.25/shadow-tls-x86_64-unknown-linux-musl -O /usr/local/bin/shadow-tls
 chmod +x /usr/local/bin/shadow-tls
 echo "[Unit]" >> ${SHADOW}
 echo "Description=Shadow-TLS Server Service" >> ${SHADOW}
