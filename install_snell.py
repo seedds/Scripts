@@ -27,9 +27,9 @@ os.chdir(os.path.expanduser("~"))
 
 # Download snell-server
 if snell_version == '3':
-    subprocess.run('wget --no-check-certificate -O snell.zip https://dl.nssurge.com/snell/snell-server-v3.0.1-linux-amd64.zip'.split(' '))
+    subprocess.run('wget --no-check-certificate -O snell.zip https://github.com/seedds/Scripts/raw/main/snell-server-v3.0.1-linux-amd64.zip'.split(' '))
 else:
-    subprocess.run('wget --no-check-certificate -O snell.zip https://dl.nssurge.com/snell/snell-server-v4.0.1-linux-amd64.zip'.split(' '))
+    subprocess.run('wget --no-check-certificate -O snell.zip https://github.com/seedds/Scripts/raw/main/snell-server-v4.0.1-linux-amd64.zip'.split(' '))
 subprocess.run('unzip -o snell.zip'.split(' '))
 os.remove('snell.zip')
 subprocess.run('chmod +x snell-server'.split(' '))
