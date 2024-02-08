@@ -97,6 +97,7 @@ with open("/var/spool/cron/crontabs/root", "a") as f:
 # Restart the cron service
 subprocess.run('systemctl restart cron'.split(' '))
 
+subprocess.run('apt install ufw'.split(' '))
 subprocess.run('ufw default deny'.split(' '))
 subprocess.run('ufw allow 22/tcp'.split(' '))
 subprocess.run(f'ufw allow {shadow_port}/tcp'.split(' '))
