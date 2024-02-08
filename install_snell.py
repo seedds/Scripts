@@ -97,6 +97,13 @@ with open("/var/spool/cron/crontabs/root", "a") as f:
 # Restart the cron service
 subprocess.run('systemctl restart cron'.split(' '))
 
+subprocess.run('ufw default deny'.split(' '))
+subprocess.run('ufw allow 22/tcp'.split(' '))
+subprocess.run(f'ufw allow {shadow_port}/tcp'.split(' '))
+subprocess.run(f'ufw allow {snell_port}/tcp'.split(' '))
+subprocess.run('ufw --force enable'.split(' '))
+subprocess.run('ufw status'.split(' '))
+
 # Get the public IP address using curl and sed
 my_ip4 = subprocess.check_output('curl -s checkip.dyndns.org'.split(' ')).decode('utf-8')
 my_ip4 = my_ip4.split('Current IP Address: ')[1].split('<')[0].strip()
