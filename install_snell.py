@@ -36,9 +36,11 @@ subprocess.run('chmod +x snell-server'.split(' '))
 subprocess.run('mv -f snell-server /usr/local/bin/'.split(' '))
 
 # Remove existing files
-os.remove(CONF)
-os.remove(SYSTEMD)
-os.remove(SHADOW)
+subprocess.run('rm -r /etc/snell'.split(' '))
+if os.path.exists(SYSTEMD):
+    os.remove(SYSTEMD)
+if os.path.exists(SHADOW):
+    os.remove(SHADOW)
 
 os.makedirs('/etc/snell/')
 
