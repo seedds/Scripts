@@ -101,7 +101,6 @@ subprocess.run('apt install ufw'.split(' '))
 subprocess.run('ufw default deny'.split(' '))
 subprocess.run('ufw allow 22/tcp'.split(' '))
 subprocess.run(f'ufw allow {shadow_port}/tcp'.split(' '))
-subprocess.run(f'ufw allow {snell_port}/tcp'.split(' '))
 subprocess.run('ufw --force enable'.split(' '))
 subprocess.run('ufw status'.split(' '))
 
