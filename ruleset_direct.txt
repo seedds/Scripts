@@ -1,0 +1,9 @@
+.gvt1-cn.com
+.gog.com
+.prod.dl.playstation.net
+.steamcontent.com
+.parsecusercontent.com
+.parsec.app
+.gofile.io
+.broadcasthe.net
+.steamserver.net
