@@ -1,0 +1,10 @@
+anthropic.com
+claude.ai
+bingapis.com
+microsoftonline.com
+bing.com
+live.com
+microsoft.com
+dl.google.com
+openai.com
+chatgpt.com
