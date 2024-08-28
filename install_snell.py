@@ -17,7 +17,7 @@ shadow_port = input('ShadowTLS Port [1-65535] (Default: 58443): ') or '58443'
 shadow_psk = input("ShadowTLS PSK (Default: Random): ") or os.urandom(16).hex()
 
 # Stop the annoying "processing triggers for man-db"
-os.system('apt-get remove --purge man-db')
+subprocess.run('apt-get remove --purge man-db')
 
 # Stop snell and shadow-tls services
 subprocess.run('systemctl stop snell shadow-tls'.split(' '))
@@ -119,5 +119,5 @@ print(f'psk = {snell_psk}')
 print('[shadow-tls]')
 print(f'port = {shadow_port}')
 print(f'psk = {shadow_psk}')
-print(f'snell, {my_ip4}, {shadow_port}, psk={snell_psk}, version={snell_version}, shadow-tls-password={shadow_psk}, shadow-tls-sni=gateway.icloud.com, shadow-tls-version=3')
+print(f'snell, {my_ip4}, {shadow_port}, psk={snell_psk}, version={snell_version}, shadow-tls-password={shadow_psk}, shadow-tls-sni=gateway.icloud.com, shadow-tls-version={snell_version}')
 print('=' * 20)
